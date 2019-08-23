@@ -161,7 +161,8 @@ public class AudioPlayer: AVPlayerWrapperDelegate {
         
         wrapper.load(from: url,
                      playWhenReady: playWhenReady,
-                     initialTime: (item as? InitialTiming)?.getInitialTime())
+                     initialTime: (item as? InitialTiming)?.getInitialTime(),
+                     headers: (item as? Authorizing)?.getHeaders())
         
         self._currentItem = item
         
@@ -305,14 +306,16 @@ public class AudioPlayer: AVPlayerWrapperDelegate {
     
     func AVWrapper(didChangeState state: AVPlayerWrapperState) {
         switch state {
-        case .ready, .loading:
+        case .ready:
             if (automaticallyUpdateNowPlayingInfo) {
                 updateNowPlayingPlaybackValues()
             }
+            
             setTimePitchingAlgorithmForCurrentItem()
         case .playing, .paused:
             if (automaticallyUpdateNowPlayingInfo) {
-                updateNowPlayingPlaybackValues()
+                updateNowPlayingCurrentTime(currentTime)
+                updateNowPlayingRate(rate)
             }
         default: break
         }
