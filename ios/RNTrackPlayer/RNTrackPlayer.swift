@@ -80,6 +80,7 @@ public class RNTrackPlayer: RCTEventEmitter {
             "playback-state",
             "playback-error",
             "playback-track-changed",
+            "playback-stalled",
             
             "remote-stop",
             "remote-pause",
@@ -204,6 +205,10 @@ public class RNTrackPlayer: RCTEventEmitter {
                     "nextTrack": (nextItem as? Track)?.id,
                     ])
             }
+        }
+
+        player.event.playbackStalled.addListener(self) { [weak self] currentItem in
+            self?.sendEvent(withName: "playback-stalled", body: ["track": (currentItem as? Track)?.id])
         }
         
         player.remoteCommandController.handleChangePlaybackPositionCommand = { [weak self] event in
