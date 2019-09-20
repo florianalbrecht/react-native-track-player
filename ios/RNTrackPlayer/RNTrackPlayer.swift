@@ -184,7 +184,7 @@ public class RNTrackPlayer: RCTEventEmitter {
             self?.sendEvent(withName: "playback-error", body: ["error": error?.localizedDescription])
         }
         
-        player.event.playbackEnd.addListener(self) { [weak self] (reason, currentItem, nextItem, currentTime) in
+        player.event.playbackEnd.addListener(self) { [weak self] (reason, currentItem, currentTime, nextItem) in
             guard let `self` = self else { return }
 
             if reason == .playedUntilEnd && nextItem == nil {
